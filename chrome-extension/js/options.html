@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html ng-app="ep" ng-csp>
+
+  <head>
+    <meta charset="utf-8" />
+    <title>Expat Peru Site Companion</title>
+     <link rel="stylesheet" href="style.css" />
+      <link rel="stylesheet" href="external/spectrum.css" />
+      <script  src="external/jquery.js" ></script>
+      <script src="external/angular.min.js" data-semver="1.1.5"></script>
+      <script src="external/spectrum.js" ></script>
+      <script src="defaults.js"></script>
+      <script src="options.js"></script>
+  </head>
+
+  <body ng-controller="MainCtrl">
+    <h1>Expat Peru Companion</h1>
+      <h2>Post Title Normalization</h2>
+    <div>
+    	We have a few settings for the Post Title normalizer:  Current Setting: <span class="optionset">{{normalizertext}}</span>
+    </div>
+    <h2>ALL UPPERCASE </h2>
+    <div>Sometimes you just want a litle more attention.  <a href='' ng-click='setTo("uppercase")'>Click to enable</a>  </div>
+    <h2>all lowercase</h2>
+    <div>The polar opposite of the attention whoring. <a href='' ng-click='setTo("lowercase")'>Click to enable</a> </div>
+    <h2>All Normal Case Except for Small Words</h2>
+    <div>Follows some kind of  guideline for readability. Don't know which. <a href='' ng-click='setTo("normalized")'>Click to enable</a> </div>
+ <h2>CrAZy raNdOM lETTeRIng</h2>
+    <div>If you really are feeling crazy.   <a href='' ng-click='setTo("crazy")' >Click to enable</a> </div>
+
+<h2>Off</h2>
+    <div>Turn off all normalization processing.  <a href='' ng-click='setTo("off")'>Click to enable</a> </div>
+      <h2>Post Title Coloring</h2>
+      <div>Change the font color ({{colors.postTitle}}) of post titles: <input colorpicker="postTitle" /></div>
+
+
+      <h2>Post Image Fixing-  <span class="optionset">{{imageFix ? "enabled" : "disabled"}}</span></h2>
+      <div>Images that are large get really messed up.  If you want to enable this plugin to fix them so they fit inside the body: Click to <a href="" ng-click="setImageFix()">{{imageFix ? "Disable it" : "Enable it"}}</a></div>
+
+      <h2>Topic Alternate Row Coloring</h2>
+      <div>Topic list alternate colors.</div>
+      <div>Even Row Color <input colorpicker="evenRow"> - <a href='' ng-click='setTransparent("evenRow")'>Transparent</a></div>
+      <div>Odd Row Color <input colorpicker="oddRow"> - <a href='' ng-click='setTransparent("oddRow")'>Transparent</a></div>
+     
+     <h2>Custom width - <span class='optionset'>{{fullWidth ? "Enabled" : "Disabled"}}</span></h2>
+     <div>Sometimes it is nicer to read the site at 100%.  <a href='' ng-click='setWidth()'>{{fullWidth ? "disable" : "enable"}}</a>
+
+  </body>
+
+</html>
