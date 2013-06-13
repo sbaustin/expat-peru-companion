@@ -1,5 +1,7 @@
 #phpbb.companion.options-fullwidth #wrap {width:100% !important;}
 
+#phpbb.companion dl.collapsey ul.topiclist li {padding-left:20px !important}
+
 /*lightbox styles*/
 
 /* line 6, ../sass/lightbox.sass */

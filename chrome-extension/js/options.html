@@ -15,7 +15,13 @@
 
   <body ng-controller="MainCtrl">
     <h1>Expat Peru Companion</h1>
-      <h2>Post Title Normalization</h2>
+  <fieldset>
+    <h2>Post Body Normalization <span class="optionset">{{fixBody ? "enabled" : "disabled"}}</span></h2>
+    <div>Perhaps you don't like reading all capital letters?   <a href='' ng-click='setBodyFixing()'>{{fixBody ? "Disable it" : "Enable it"}}</a>  
+  </fieldset>    
+
+    <fieldset>
+    <h2>Post Title Normalization</h2>
     <div>
     	We have a few settings for the Post Title normalizer:  Current Setting: <span class="optionset">{{normalizertext}}</span>
     </div>
@@ -30,21 +36,25 @@
 
 <h2>Off</h2>
     <div>Turn off all normalization processing.  <a href='' ng-click='setTo("off")'>Click to enable</a> </div>
+  </fieldset>
+  <fieldset>
       <h2>Post Title Coloring</h2>
       <div>Change the font color ({{colors.postTitle}}) of post titles: <input colorpicker="postTitle" /></div>
-
-
+</fieldset>
+<fieldset>
       <h2>Post Image Fixing-  <span class="optionset">{{imageFix ? "enabled" : "disabled"}}</span></h2>
       <div>Images that are large get really messed up.  If you want to enable this plugin to fix them so they fit inside the body: Click to <a href="" ng-click="setImageFix()">{{imageFix ? "Disable it" : "Enable it"}}</a></div>
-
+</fieldset>
+<fieldset>
       <h2>Topic Alternate Row Coloring</h2>
       <div>Topic list alternate colors.</div>
       <div>Even Row Color <input colorpicker="evenRow"> - <a href='' ng-click='setTransparent("evenRow")'>Transparent</a></div>
       <div>Odd Row Color <input colorpicker="oddRow"> - <a href='' ng-click='setTransparent("oddRow")'>Transparent</a></div>
-     
+</fieldset>
+<fieldset>
      <h2>Custom width - <span class='optionset'>{{fullWidth ? "Enabled" : "Disabled"}}</span></h2>
      <div>Sometimes it is nicer to read the site at 100%.  <a href='' ng-click='setWidth()'>{{fullWidth ? "disable" : "enable"}}</a>
-
+</fieldset>
   </body>
 
 </html>

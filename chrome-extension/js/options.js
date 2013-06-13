@@ -66,6 +66,8 @@ app.directive('colorpicker', function() {
                 $scope.imageFix = items.imagefix;
                 $scope.colors = items.colors;
                 $scope.fullWidth = items.fullWidth;
+
+                $scope.fixBody = items.fixBody;
                 $scope.$apply();
             });
 
@@ -93,6 +95,15 @@ app.directive('colorpicker', function() {
                 chrome.storage.sync.set({ 'imagefix': $scope.imageFix}, function () {
 
                 });
+            }
+
+            $scope.setBodyFixing = function() {
+                $scope.fixBody = !$scope.fixBody;
+
+                chrome.storage.sync.set({ 'fixBody': $scope.fixBody}, function () {
+
+                  });
+
             }
 
             $scope.setWidth = function(){

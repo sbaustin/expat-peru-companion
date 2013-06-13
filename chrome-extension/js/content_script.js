@@ -24,18 +24,130 @@ THE SOFTWARE.
 */
 window.jquery = jQuery;
 
+
+
+
+(function(){
+    var small = "(a|an|and|as|at|but|by|en|for|if|in|of|on|or|the|to|v[.]?|via|vs[.]?)";
+    var punct = "([!\"#$%&'()*+,./:;<=>?@[\\\\\\]^_`{|}~-]*)";
+  
+    this.titleCaps = function(title){
+        var parts = [], split = /[:.;?!] |(?: |^)["Ò]/g, index = 0;
+        
+        while (true) {
+            var m = split.exec(title);
+
+            parts.push( title.substring(index, m ? m.index : title.length)
+                .replace(/\b([A-Za-z][a-z.'Õ]*)\b/g, function(all){
+                    return /[A-Za-z]\.[A-Za-z]/.test(all) ? all : upper(all);
+                })
+                .replace(RegExp("\\b" + small + "\\b", "ig"), lower)
+                .replace(RegExp("^" + punct + small + "\\b", "ig"), function(all, punct, word){
+                    return punct + upper(word);
+                })
+                .replace(RegExp("\\b" + small + punct + "$", "ig"), upper));
+            
+            index = split.lastIndex;
+            
+            if ( m ) parts.push( m[0] );
+            else break;
+        }
+        
+        return parts.join("").replace(/ V(s?)\. /ig, " v$1. ")
+            .replace(/(['Õ])S\b/ig, "$1s")
+            .replace(/\b(AT&T|Q&A)\b/ig, function(all){
+                return all.toUpperCase();
+            });
+    };
+    
+    function lower(word){
+        return word.toLowerCase();
+    }
+    
+    function upper(word){
+      return word.substr(0,1).toUpperCase() + word.substr(1);
+    }
+})();
+
+function fixCapitalsText (text)
+{
+  result = "";
+
+  sentenceStart = true;
+  for (i = 0; i < text.length; i++)
+  {
+    ch = text.charAt (i);
+
+    if (sentenceStart && ch.match (/^\S$/))
+    {
+      ch = ch.toUpperCase ();
+      sentenceStart = false;
+    }
+    else
+    {
+      ch = ch.toLowerCase ();
+    }
+
+    if (ch.match (/^[.!?\>]$/))
+    {
+      sentenceStart = true;
+    }
+
+    result += ch;
+  }
+
+  return result;
+}
+
+jQuery.fn.sortByDepth = function() {
+    var ar = this.map(function() {
+            return {length: jQuery(this).parents().length, elt: this}
+        }).get(),
+        result = [],
+        i = ar.length;
+
+
+    ar.sort(function(a, b) {
+        return a.length - b.length;
+    });
+
+    while (i--) {
+        result.push(ar[i].elt);
+    }
+    return jQuery(result);
+};
+
+ jQuery.fn.sentenceCase = function () {
+
+
+
+                return this.each(function () {
+                    var $this = jQuery(this);
+                    if (this.nodeType == 3)
+                        this.data =fixCapitalsText($this.text());
+                    else if ($this.children().length==0)
+                        $this.text(fixCapitalsText($this.text())); 
+                    //$this.html(fixCapitalsText($this.html()));
+                });
+
+            };
+
+
+
+
+
  $.noConflict();
 
 var expandIcon = iconPath("expand.png");
 
 jQuery(document).ready(function ($) {
 $body= $('body');
+
 $body.addClass('companion');
     function setCharAt(str, index, chr) {
         if (index > str.length - 1) return str;
         return str.substr(0, index) + chr + str.substr(index + 1);
     }
-
 
     //$('.topic-actions').append('<a href="#" id="fullscreen"><img src="'+ expandIcon + '"></a>');
     //$('.post').wrapAll('<div id="full"></div>');
@@ -67,6 +179,31 @@ $body.addClass('companion');
 
     chrome.storage.sync.get(pluginData, function (items) {
 
+if (items.fixBody) {
+    var ar = []; 
+    $('.post .content').each(function(i){
+        var $this = $(this);
+        $this.contents().filter(function() {
+            return this.nodeType === 3; //Node.TEXT_NODE
+        }).wrap('<span></span>');
+
+
+        //var $this = $(this);
+        //$this.sentenceCase();
+        //$('*', $this).sentenceCase();
+        $('*', $this).not('cite').sortByDepth().sentenceCase();
+        //var elems = $('*', $this).sortByDepth();
+        /*elems.each(function() {
+            $(this).contents().filter(function() {
+                return this.nodeType === 3; //Node.TEXT_NODE
+            }).sentenceCase();
+        }); */
+
+     
+        
+
+    });
+}
 
         if (items.fullWidth) {
             $body.addClass('options-fullwidth');
@@ -106,6 +243,43 @@ $body.addClass('companion');
            
         }
 
+        // main board topics like business, expat info, etc
+        /*$maintopiclist = $('.topiclist.forums li.row');
+        $maintopiclist.each(function(i) {
+            var $this = $(this);
+            $a = $('a:eq(0)', $this);
+            var $dt = $('<dl class="hidden collapsey" data-href="' + $a.attr('href') + '" id="collapse-' + i + '"></dl>');
+            $dt = $dt.appendTo($this);
+            $this.hover(function() {
+              if ($this.find('.collapsey'))
+                $dt.removeClass('hidden');
+
+               $.get($this.find(".collapsey").attr("data-href"), function(data) {
+
+                  var $topics = $(data).find('.forumbg:not(.announcement) .topiclist.topics');
+                  $topics.children('li.sticky').remove();
+                  $topics.children('li:gt(5)').remove();
+                  $topics.find('li').css('padding-left', '20px');
+                  var $topics = $($topics.html());
+
+                  $topics.appendTo($dt);
+                  $dt.removeClass('hidden');
+               });
+                
+                
+                
+
+            }, function() {
+
+                $dt.addClass('hidden');
+                //$dt.remove();
+
+        });
+
+
+        }); */
+
+        // individual post inside a forum
         $topiclist = $('.topiclist.topics li');
 
 
@@ -247,6 +421,10 @@ $body.addClass('companion');
         }
 
         $postTitles.normalizer();
+
+
+
+
     });
 
 

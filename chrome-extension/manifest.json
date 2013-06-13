@@ -1,19 +1,27 @@
 {
     "name": "Expat's in Peru Website Companion",
-    "version": "1.30",
+    "version": "1.40",
    "options_page": "/js/options.html",
+    /*"browser_action": {
+        "default_icon": {                    // optional
+            "19": "img/icons/badge.png"           // optional
+      
+        },
+    "default_title": "Expat's Companion",      // optional; shown in tooltip
+    "default_popup": "js/popup.html"        // optional
+  }, */
     "description": "Expat peru website companion.  Many options to help view the site.",
      "permissions": [
-        "http://*.expatperu.com/", "storage"
+        "http://*.expatperu.com/", "storage", "tabs", "notifications"
     ],
     "background": {
-        "scripts": ["/js/background.js"]
-    },
+    "page": "js/background.html"
+  },
     "content_scripts": [
         {
-        "run_at": "document_end",
+        "run_at": "document_start",
 		"all_frames": true,
-            "matches": ["<all_urls>"],
+            "matches": ["http://*.expatperu.com/*"],
             "js": [
                     "/js/defaults.js",
                     
@@ -23,7 +31,7 @@
                     "/js/external/bootstrap.min.js",
                     "/js/content_script.js"
                 ],
-            "css": [ "/js/external/lightbox/jquery.fancybox.css","/css/bootstrap.css"
+            "css": [ "/css/style.css", "/js/external/lightbox/jquery.fancybox.css","/css/bootstrap.css"
 
             ]
         }
